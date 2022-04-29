@@ -1,3 +1,5 @@
+const path = require('path')
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 // Get Tweet objects by ID, using bearer token authentication
 // https://developer.twitter.com/en/docs/twitter-api/tweets/lookup/quick-start
 
@@ -8,7 +10,7 @@ const needle = require('needle');
 // export BEARER_TOKEN='YOUR-TOKEN'
 const token = process.env.BEARER_TOKEN;
 
-const endpointURL = "https://api.twitter.com/2/tweets?ids=";
+const endpointURL = "https://api.twitter.com/2/users/1518904631409221632/mentions";
 
 async function getRequest() {
 
@@ -16,9 +18,9 @@ async function getRequest() {
     // specify Tweet IDs to fetch, and any additional fields that are required
     // by default, only the Tweet ID and text are returned
     const params = {
-        "ids": "1519337880593780736", // Edit Tweet IDs to look up
+        /*"ids": "1519337880593780736", // Edit Tweet IDs to look up
         "tweet.fields": "lang,author_id", // Edit optional query parameters here
-        "user.fields": "created_at" // Edit optional query parameters here
+        "user.fields": "created_at" // Edit optional query parameters here*/
     }
 
     // this is the HTTP header that adds bearer token authentication
