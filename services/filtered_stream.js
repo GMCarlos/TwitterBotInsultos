@@ -1,8 +1,10 @@
 // Open a realtime stream of Tweets, filtered according to rules
 // https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/quick-start
-
+const tweet = require('./createTweet');
 const needle = require('needle');
-const path = require('path')
+const path = require('path');
+const insultos =  require('./insulto');
+const Insulto = new insultos();
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 
 // The code below sets the bearer token from your environment variables
@@ -20,7 +22,7 @@ const streamURL = 'https://api.twitter.com/2/tweets/search/stream';
 
 // Edit rules as desired below
 const rules = [{
-        'value': '("@InsultarBot insulta a") -"filtered stream"',
+        'value': '("@InsultarBot insulta a ") -"filtered stream"',
         "tag": "Citas para insultos"
     },
 ];
@@ -37,6 +39,7 @@ async function getAllRules() {
         console.log("Error:", response.statusMessage, response.statusCode)
         throw new Error(response.body);
     }
+
 
     return (response.body);
 }
@@ -65,12 +68,7 @@ async function deleteAllRules(rules) {
     if (response.statusCode !== 200) {
         throw new Error(response.body);
     }
-
-    //en response.body tengo esto
-    /*{
-        data: { id: '1521421927130279936', text: '@InsultarBot insulta a @Fompe_' },
-        matching_rules: [ { id: '1521421864953958400', tag: 'Citas para insultos' } ]
-    }*/
+    
 
 
     return (response.body);
@@ -93,7 +91,6 @@ async function setRules() {
     if (response.statusCode !== 201) {
         throw new Error(response.body);
     }
-
     return (response.body);
 
 }
@@ -112,6 +109,11 @@ function streamConnect(retryAttempt) {
         try {
             const json = JSON.parse(data);
             console.log(json);
+            console.log(json.data.text);
+            let nick = json.data.text.split("@InsultarBot insulta a ");
+            //REGEX para nick solo
+            let nombre = nick[1];
+            tweet.createTweet(nombre + Insulto.generarInsulto());
             // A successful connection resets retry count.
             retryAttempt = 0;
         } catch (e) {
@@ -150,7 +152,7 @@ function streamConnect(retryAttempt) {
         currentRules = await getAllRules();
 
         // Delete all rules. Comment the line below if you want to keep your existing rules.
-        await deleteAllRules(currentRules);
+        //await deleteAllRules(currentRules);
 
         // Add rules to the stream. Comment the line below if you don't want to add new rules.
         await setRules();
