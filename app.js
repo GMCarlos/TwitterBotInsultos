@@ -1,20 +1,4 @@
-require('dotenv').config();
-const express = require('express');
-const insultos =  require('./models/insulto');
-const app = express()
-const port = 3000
+const path = require('path')
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
+const insultos =  require('./services/insulto');
 
-app.get('/', (req, res) => {
-  let insulto = new insultos();
-  res.send(insulto.generarInsulto());
-  
-})
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-  //llamar al mentions
-
-  //parsear el text que recibimos para obtener el @
-
-  //crear tweet nombrando al @
-})
