@@ -108,8 +108,6 @@ function streamConnect(retryAttempt) {
     stream.on('data', data => {
         try {
             const json = JSON.parse(data);
-            console.log(json);
-            console.log(json.data.text);
             let nick = json.data.text.split("@InsultarBot insulta a ");
             //REGEX para nick solo
             let nombre = nick[1];
